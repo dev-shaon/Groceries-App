@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:groceries_app/Screens/forgot_Screen.dart';
+import 'package:groceries_app/Screens/location_Screen.dart';
 import 'package:groceries_app/Screens/signup_screen.dart';
 import 'package:groceries_app/Widget/Elevated_Button.dart';
 
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Loging",
+                    "Log in",
                     style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -106,7 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               SizedBox(height: 30),
-              CustomButton(text: "Log In", onPressed: () {}),
+              CustomButton(text: "Log In", onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationScreen()));
+              }),
               SizedBox(height: 18),
               Container(
                 height: 67,

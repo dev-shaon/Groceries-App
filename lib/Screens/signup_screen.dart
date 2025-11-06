@@ -134,32 +134,36 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-               SizedBox(height: 16),
-               Text(
+              SizedBox(height: 16),
+              Text(
                 "By continuing you agree to our Terms of Service \nand Privacy Policy.",
                 style: TextStyle(color: Colors.grey),
               ),
-               SizedBox(height: 30),
+              SizedBox(height: 30),
               Center(
-                child: CustomButton(text: "Sign Up", onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-                }),
+                child: CustomButton(
+                  text: "Sign Up",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
+                ),
               ),
-               SizedBox(height: 18),
+              SizedBox(height: 18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   Text("Already have an account?"),
+                  Text("Already have an account?"),
                   TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) =>  SignupScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
                       );
                     },
-                    child:  Text(
+                    child: Text(
                       "Log in",
                       style: TextStyle(color: Colors.green),
                     ),
