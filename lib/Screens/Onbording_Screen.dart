@@ -24,7 +24,7 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
         ),
         child: Column(
           children: [
-            SizedBox(height: 400),
+            SizedBox(height: 500),
             Image(image: AssetImage("assets/images/carot.png")),
             SizedBox(height: 6),
             Text(
