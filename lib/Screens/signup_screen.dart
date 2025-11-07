@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:groceries_app/API/User_Model.dart';
+import 'package:groceries_app/API/User_Provider.dart';
 import 'package:groceries_app/Screens/LogIn_Screen.dart';
 import 'package:groceries_app/Widget/Elevated_Button.dart';
+import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -10,10 +13,19 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+  final TextEditingController fristController = TextEditingController();
+  final TextEditingController lastController = TextEditingController();
+
   bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
+
+    final auth = Provider.of<UserProvider>(context);
+
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -57,8 +69,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           "Firstname",
                           style: TextStyle(
                             color: Colors.grey,
@@ -66,7 +78,9 @@ class _SignupScreenState extends State<SignupScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        TextField(),
+                        TextField(
+                          controller: fristController,
+                        ),
                       ],
                     ),
                   ),
@@ -74,8 +88,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           "Lastname",
                           style: TextStyle(
                             color: Colors.grey,
@@ -83,7 +97,9 @@ class _SignupScreenState extends State<SignupScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        TextField(),
+                        TextField(
+                          controller: lastController,
+                        ),
                       ],
                     ),
                   ),
@@ -99,7 +115,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const TextField(),
+              TextField(
+                controller: nameController,
+              ),
               const SizedBox(height: 20),
               const Text(
                 "Email",
@@ -109,7 +127,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const TextField(),
+              TextField(
+                controller: emailController,
+              ),
               const SizedBox(height: 30),
               const Text(
                 "Password",
@@ -120,6 +140,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               TextField(
+                controller: passController,
                 obscureText: _isObscure,
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
@@ -143,11 +164,30 @@ class _SignupScreenState extends State<SignupScreen> {
               Center(
                 child: CustomButton(
                   text: "Sign Up",
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                  onPressed: () async {
+                    final success = await auth.Submit(
+                      UserModel(
+                        name: nameController.text,
+                        email: emailController.text,
+                        password: passController.text,
+                        firstname: fristController.text,
+                        lastname: lastController.text,
+                      ),
                     );
+
+                    if (success) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("User Posted Successfully")),
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text("Failed to Post")));
+                    }
                   },
                 ),
               ),

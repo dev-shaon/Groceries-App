@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:groceries_app/API/User_Provider.dart';
 import 'package:groceries_app/Screens/forgot_Screen.dart';
 import 'package:groceries_app/Screens/location_Screen.dart';
 import 'package:groceries_app/Screens/signup_screen.dart';
 import 'package:groceries_app/Widget/Elevated_Button.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,9 +14,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+
   bool _isObscure = true;
+
   @override
   Widget build(BuildContext context) {
+    
+    final auth = Provider.of<UserProvider>(context);
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -45,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Enter your emails and password",
+                    "Enter your email and password",
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 16,
@@ -68,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              TextField(),
+              TextField(controller: emailController),
               SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +92,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               TextField(
-                obscureText: _isObscure, 
+                controller: passController,
+                obscureText: _isObscure,
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -92,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        _isObscure = !_isObscure; 
+                        _isObscure = !_isObscure;
                       });
                     },
                   ),
@@ -101,15 +110,39 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotScreen()));
-                  }, child: Text("Forgot Password?")),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => ForgotScreen()));
+                    },
+                    child: Text("Forgot Password?"),
+                  ),
                 ],
               ),
               SizedBox(height: 30),
-              CustomButton(text: "Log In", onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationScreen()));
-              }),
+              CustomButton(
+                text: "Log In",
+                onPressed: () async {
+                  final success = await auth.loginUser(
+                    emailController.text,
+                    passController.text,
+                  );
+
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text("Login Successful")),
+                    );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LocationScreen()));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Login Failed")),
+                    );
+                  }
+                },
+              ),
               SizedBox(height: 18),
               Container(
                 height: 67,
@@ -121,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(padding: EdgeInsetsGeometry.all(16)),
+                    Padding(padding: EdgeInsets.all(16)),
                     Image(image: AssetImage("assets/images/google.png")),
                     SizedBox(width: 40),
                     Text(
@@ -138,10 +171,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text("Don't have an account?"),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SignupScreen()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => SignupScreen()));
                     },
                     child: Text(
-                      "Singup",
+                      "Signup",
                       style: TextStyle(color: Colors.green),
                     ),
                   ),
