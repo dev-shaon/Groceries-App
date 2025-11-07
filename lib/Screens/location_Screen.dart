@@ -51,8 +51,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 style: TextStyle(color: Colors.grey, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 316,),
-              CustomButton(text: "Submit", onPressed: (){})
+              SizedBox(height: 316),
+              CustomButton(text: "Submit", onPressed: () {}),
             ],
           ),
         ),
